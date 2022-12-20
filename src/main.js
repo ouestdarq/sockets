@@ -4,9 +4,7 @@ import redis from './redis.js';
 import https from './https.js';
 
 export default (async () => {
-    console.log('> proxymurder-ws@1.0.0 dev');
-    console.log('> websockets/ws');
-    console.time('> wss v1.0.0 ready in');
+    console.time('> ws v1.0.0 ready in');
 
     const server = await https;
     const port = process.env.WS_PORT ?? 5000;
@@ -40,11 +38,11 @@ export default (async () => {
         }
     );
 
-    const wss = {
+    const ws = {
         app: new WebSocketServer({ noServer: true }),
     };
 
-    wss.app.on('connection', function connection(ws) {
+    ws.app.on('connection', function connection(ws) {
         redis.subscriber.app.subscribe(
             'app:notifications',
             (message, channel) => {
@@ -56,20 +54,25 @@ export default (async () => {
     server.on('upgrade', function upgrade(request, socket, head) {
         const { pathname } = parse(request.url);
         if (pathname === '/app') {
-            wss.app.handleUpgrade(request, socket, head, function done(ws) {
-                wss.app.emit('connection', ws, request);
-            });
+            ws.app.handleUpgrade(
+                request,
+                socket,
+                head,
+                function done(websocket) {
+                    ws.app.emit('connection', websocket, request);
+                }
+            );
         } else {
             socket.destroy();
         }
     });
 
     console.log('');
-    console.timeEnd('> wss v1.0.0 ready in');
+    console.timeEnd('> ws v1.0.0 ready in');
     console.log('');
 
     server.listen(port, () => {
         console.log(` ➜  Local:  https://localhost:${port}`);
-        console.log(` ➜  Socket: wss://localhost:${port}`);
+        console.log(` ➜  Socket: ws://localhost:${port}`);
     });
 })();
