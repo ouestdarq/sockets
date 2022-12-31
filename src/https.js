@@ -1,28 +1,33 @@
 import { createServer } from 'https';
-import { readFileSync } from 'fs';
+import fs from 'fs';
+import path from 'path';
 import router from './router.js';
 
-async function init({ crt, key }) {
+async function getHttps(step = {}) {
     let https = null;
-    try {
-        https = {
-            cert: readFileSync(crt),
-            key: readFileSync(key),
-        };
-    } catch (err) {
-        await init({
-            crt: crt,
-            key: key,
-        });
+    let i = 10;
+    while (!https && i > 0) {
+        try {
+            https = {
+                cert: fs.readFileSync(step.crt),
+                key: fs.readFileSync(step.key),
+            };
+        } catch (err) {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            console.log(err);
+            i--;
+        }
     }
     return https;
 }
 
 export default (async () => {
-    const https = await init({
-        crt: process.env.WS_SERVER_CRT,
-        key: process.env.WS_SERVER_KEY,
-    });
+    const steppath = process.env.WS_STEPPATH;
+    const step = {
+        crt: path.resolve(steppath, 'site.crt'),
+        key: path.resolve(steppath, 'site.key'),
+    };
+    const https = await getHttps(step);
 
     return createServer(https, router);
 })();
