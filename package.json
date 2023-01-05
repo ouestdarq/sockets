@@ -1,11 +1,11 @@
 {
-    "name": "proxymurder-socket",
+    "name": "proxymurder-ws",
     "version": "1.0.0",
     "description": "NodeJS WebSocket and Express HTTPS Server",
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "websockets": "nodemon --watch ${WS_STEPPATH}/site.crt --watch ./ index.js"
     },
     "dependencies": {
         "express": "^4.18.2",
