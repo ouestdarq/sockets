@@ -31,6 +31,7 @@ Host::Host(u_short domain, int type, int proto, int port, u_long dev)
     int l = sizeof(this->addr);
     int n;
     int r;
+
     if ((this->connection = this->attach(this->sock, this->addr)) < 0)
         exit(1);
 
