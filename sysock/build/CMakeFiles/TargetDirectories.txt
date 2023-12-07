@@ -1,0 +1,3 @@
+/home/estuardoquan/Projects/fr8/sockets/sysock/build/CMakeFiles/sysock.dir
+/home/estuardoquan/Projects/fr8/sockets/sysock/build/CMakeFiles/edit_cache.dir
+/home/estuardoquan/Projects/fr8/sockets/sysock/build/CMakeFiles/rebuild_cache.dir
