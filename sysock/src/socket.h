@@ -14,14 +14,18 @@ protected:
     struct sockaddr_in addr;
 
 public:
-    Socket(int domain, int type, int proto, int port, u_long dev);
+    Socket(u_short domain, int type, int proto, int port, u_long dev);
+
+protected:
     virtual int attach(int sock, struct sockaddr_in addr) = 0;
 };
 
 class Host : public Socket
 {
 public:
-    Host(int domain, int type, int proto, int port, u_long dev);
+    Host(u_short domain, int type, int proto, int port, u_long dev);
+
+protected:
     int attach(int sock, struct sockaddr_in addr);
 };
 
@@ -29,5 +33,7 @@ class Client : public Socket
 {
 public:
     Client(u_short domain, int type, int proto, int port, u_long dev);
+
+protected:
     int attach(int sock, struct sockaddr_in addr);
 };
