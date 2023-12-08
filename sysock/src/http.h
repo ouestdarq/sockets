@@ -15,7 +15,7 @@ typedef enum
 
 class Http
 {
-private:
+protected:
     int method;
     char *uri;
     char *version;

@@ -3,8 +3,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-#define SIZEBUF 30000
-#define SIZESOC 10
+#define SIZEBUF 300000
+#define SIZESOC 100000
 
 #define HEADERSAMPLE "HTTP/1.1 200 OK\
     Content-Type: text/html\
@@ -22,7 +22,6 @@ protected:
 
 public:
     Socket(u_short domain, int type, int proto, int port, u_long dev);
-    ~Socket();
 
 protected:
     virtual int attach(int sock, addr_t addr) = 0;

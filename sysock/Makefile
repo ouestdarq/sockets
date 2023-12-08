@@ -1,15 +1,18 @@
 SRC=./src
 BUILD=./build
 
-RUN=sysock
+RUN=${BUILD}/out
 
-all:
-
-cbuild:
-	cmake -B $(BUILD) -S $(SRC)
-
-crun: 
-	$(BUILD)/$(RUN) $(ARGS)
+all: cleanup cmake cbuild crun
 
 cleanup:
 	rm -rf $(BUILD)
+
+cmake:
+	cmake -B $(BUILD) -S $(SRC)
+
+cbuild:
+	make --directory ${BUILD}
+
+crun:
+	${BUILD}/out ${ARGS}

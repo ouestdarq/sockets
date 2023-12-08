@@ -13,13 +13,10 @@ Http::Http(char *request)
             request[i + 1] = '|';
 
     char *line = strtok(request, "\n");
-    char *headf = strtok(__null, "|");
+    char *head = strtok(__null, "|");
     char *body = strtok(__null, "|");
 
-    printf("%s", headf);
-
     char *method = strtok(line, " ");
-
     this->method = this->map_method(method);
     this->uri = strtok(__null, " ");
     this->version = strtok(__null, " ");

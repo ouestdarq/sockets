@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26.5)
 
-project(sysock)
+project(out)
 
 add_executable(${PROJECT_NAME}
     main.cpp
