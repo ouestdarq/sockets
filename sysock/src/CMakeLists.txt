@@ -4,5 +4,6 @@ project(sysock)
 
 add_executable(${PROJECT_NAME}
     main.cpp
+    http.cpp http.h
     socket.cpp socket.h
 )

@@ -1,5 +1,5 @@
 /build
-/ext
+/src/ext
 
 # Prerequisites
 *.d
