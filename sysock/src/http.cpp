@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
 #include <map>
 
 #include "http.h"
@@ -8,32 +10,50 @@ using std::map;
 
 Http::Http(char *request)
 {
-    for (int i = 0; i < strlen(request) - 2; i++)
+    char *l, *h, *k, *m, *p, *t, *v;
+
+    if (!strlen(request))
+        goto err;
+
+    for (int i = 0; i < strlen(request) - 1; i++)
         if (request[i] == '\n' == request[i + 1])
             request[i + 1] = '|';
 
-    char *line = strtok(request, "\n");
-    char *head = strtok(__null, "|");
-    char *body = strtok(__null, "|");
+    l = strtok(request, "\n");
+    h = strtok(__null, "|");
+    k = strtok(__null, "|");
 
-    char *method = strtok(line, " ");
-    this->method = this->map_method(method);
-    this->uri = strtok(__null, " ");
-    this->version = strtok(__null, " ");
+    m = strtok(l, " ");
+    p = strtok(__null, " ");
+    t = strtok(__null, " ");
+    v = strtok(t, "HTTP/");
+
+    this->uri = p;
+    this->version = atof(v);
+    this->method = this->map_methods(m);
+
+    printf("%s\t%f\t%i\n", this->uri, this->version, this->method);
+
+    return;
+err:
+{
+    perror("Error parsing request");
+    exit(1);
+}
 }
 
-int Http::map_method(char *method)
+int Http::map_methods(const char *m)
 {
-    map<const char *, int> methods = {
+    map<const char *, int, strcmp_s> methods = {
+        {"CONNECT", CONNECT},
+        {"DELETE", DELETE},
         {"GET", GET},
+        {"HEAD", HEAD},
+        {"OPTIONS", OPTIONS},
+        {"PATCH", PATCH},
         {"POST", POST},
         {"PUT", PUT},
-        {"HEAD", HEAD},
-        {"PATCH", PATCH},
-        {"DELETE", DELETE},
-        {"CONNECT", CONNECT},
-        {"OPTIONS", OPTIONS},
         {"TRACE", TRACE},
     };
-    return methods[method];
+    return methods[m];
 }

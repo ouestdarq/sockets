@@ -1,4 +1,4 @@
-SRC=./src
+SRC=./
 BUILD=./build
 
 RUN=${BUILD}/out

@@ -7,9 +7,10 @@
 #define SIZESOC 100000
 
 #define HEADERSAMPLE "HTTP/1.1 200 OK\
-    Content-Type: text/html\
-    Connection: close\n\n\
-    <html>hello world!</html>"
+Content-Type: text/html\
+Connection: keep-alive\n\n\
+<html>hello world!</html>\
+\n"
 
 typedef struct sockaddr_in addr_t;
 
