@@ -8,6 +8,14 @@
 
 using std::map;
 
+struct StrCmp
+{
+    bool operator()(char const *a, char const *b) const
+    {
+        return strcmp(a, b) < 0;
+    }
+};
+
 Http::Http(char *request)
 {
     char *l, *h, *k, *m, *p, *t, *v;
@@ -16,16 +24,16 @@ Http::Http(char *request)
         goto err;
 
     for (int i = 0; i < strlen(request) - 1; i++)
-        if (request[i] == '\n' == request[i + 1])
+        if (request[i] == '\n' && request[i + 1] == '\n')
             request[i + 1] = '|';
 
     l = strtok(request, "\n");
-    h = strtok(__null, "|");
-    k = strtok(__null, "|");
+    h = strtok(nullptr, "|");
+    k = strtok(nullptr, "|");
 
     m = strtok(l, " ");
-    p = strtok(__null, " ");
-    t = strtok(__null, " ");
+    p = strtok(nullptr, " ");
+    t = strtok(nullptr, " ");
     v = strtok(t, "HTTP/");
 
     this->uri = p;
@@ -36,15 +44,13 @@ Http::Http(char *request)
 
     return;
 err:
-{
     perror("Error parsing request");
     exit(1);
-}
 }
 
 int Http::map_methods(const char *m)
 {
-    map<const char *, int, strcmp_s> methods = {
+    map<const char *, int, StrCmp> methods = {
         {"CONNECT", CONNECT},
         {"DELETE", DELETE},
         {"GET", GET},
@@ -55,5 +61,6 @@ int Http::map_methods(const char *m)
         {"PUT", PUT},
         {"TRACE", TRACE},
     };
+
     return methods[m];
 }

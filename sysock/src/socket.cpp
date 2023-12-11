@@ -24,17 +24,15 @@ Socket::Socket(u_short domain, int type, int proto, int port, u_long dev)
 
     return;
 err:
-{
     perror("\nError: could not initialize Socket\t");
     exit(1);
-}
 }
 
 Host::Host(u_short domain, int type, int proto, int port, u_long dev)
     : Socket(domain, type, proto, port, dev)
 {
     const char *h = HEADERSAMPLE;
-    char buffer[SIZEBUF] = {0};
+    char buffer[BUFFER] = {0};
     int addrlen = sizeof(this->addr);
     int conn;
 
@@ -44,17 +42,15 @@ Host::Host(u_short domain, int type, int proto, int port, u_long dev)
     printf("\t\t\t...done\n");
 
     printf("listening");
-    if (listen(this->sock, SIZESOC) < 0)
+    if (listen(this->sock, BACKLOG) < 0)
         goto err;
-    printf("\t\t\t...done\n");
-
+    printf("\t\t\t\t...done\n");
     while (true)
     {
-        printf("accepting incoming...\n");
         if ((conn = accept(this->sock, (struct sockaddr *)&this->addr, (socklen_t *)&addrlen)) < 0)
             goto err;
 
-        read(conn, buffer, SIZEBUF);
+        read(conn, buffer, BUFFER);
 
         Http http = Http(buffer);
 
@@ -65,12 +61,11 @@ Host::Host(u_short domain, int type, int proto, int port, u_long dev)
 
     return;
 err:
-{
     perror("\nError: could not initialize Host");
     exit(1);
 }
-}
-int Host::attach(int sock, addr_t addr)
+
+int Host::attach(int sock, struct sockaddr_in addr)
 {
     return bind(sock, (struct sockaddr *)&addr, sizeof(addr));
 }
@@ -83,7 +78,7 @@ Client::Client(u_short domain, int type, int proto, int port, u_long dev)
         exit(1);
 }
 
-int Client::attach(int sock, addr_t addr)
+int Client::attach(int sock, struct sockaddr_in addr)
 {
     return connect(sock, (struct sockaddr *)&addr, sizeof(addr));
 }

@@ -1,13 +1,5 @@
 #pragma once
 
-struct strcmp_s
-{
-    bool operator()(char const *s1, char const *s2) const
-    {
-        return strcmp(s1, s2) < 0;
-    }
-};
-
 typedef enum
 {
     CONNECT,
