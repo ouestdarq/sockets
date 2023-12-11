@@ -24,7 +24,6 @@ public:
 
 protected:
     virtual int attach(int sock, struct sockaddr_in addr) = 0;
-    virtual void run() = 0;
 };
 
 class Host : public Socket
@@ -36,11 +35,12 @@ protected:
     int attach(int sock, struct sockaddr_in addr);
 };
 
-class Client : public Socket
-{
-public:
-    Client(u_short domain, int type, int proto, int port, u_long dev);
+// TODO: client.cpp
+// class Client : public Socket
+// {
+// public:
+//     Client(u_short domain, int type, int proto, int port, u_long dev);
 
-protected:
-    int attach(int sock, struct sockaddr_in addr);
-};
+// protected:
+//     int attach(int sock, struct sockaddr_in addr);
+// };

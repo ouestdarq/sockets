@@ -2,22 +2,19 @@
 #include <stdlib.h>
 // #include <lnlist.h>
 #include <queue.h>
-#include "socket.h"
+#include <socket.h>
 
 int main(int argc, char const *argv[])
 {
-    // Host host = Host(AF_INET, SOCK_STREAM, 0, 3503, INADDR_ANY);
-
-    LnList l = LnList<int>();
+    Host host = Host(AF_INET, SOCK_STREAM, 0, 3503, INADDR_ANY);
+    // LnList l = LnList<int>();
     // l.insert(1, 0);
 
-    for (int i = 0; i < 2; i++)
-        l.insert(i, i);
+    // for (int i = 0; i < 2; i++)
+    // l.insert(i, i);
 
     // l[0] = 3;
     // l.remove(3);
-    l.read(2);
-    l.read(10);
 
     // for (int i = 0; i < l.size(); i++)
     //     printf("%i\n", l[i]);

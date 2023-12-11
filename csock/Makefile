@@ -15,4 +15,4 @@ cbuild:
 	make --directory ${BUILD}
 
 crun:
-	${BUILD}/out ${ARGS}
+	${RUN} ${ARGS}
