@@ -4,7 +4,7 @@ project(out)
 
 add_subdirectory(lib/data-structs)
 
-add_subdirectory(lib/sockx)
+add_subdirectory(lib/network)
 
 
 add_executable(${PROJECT_NAME}

@@ -5,7 +5,7 @@ project(sockx)
 add_subdirectory(core)
 
 add_library(${PROJECT_NAME}
-    socks/host.cpp socks/host.h
+    sockx/host.cpp sockx/host.h
 )
 
 target_include_directories(${PROJECT_NAME}
