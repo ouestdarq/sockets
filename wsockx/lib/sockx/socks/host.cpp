@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include <core/requests/http.h>
+
 #include "host.h"
 
 int Host::attach(int sock, struct sockaddr_in addr)
