@@ -2,7 +2,8 @@
 #include <stdlib.h>
 // #include <lists/linked.h>
 // #include <queue/queue.h>
-#include <sockx/network.h>
+// #include <sockx/network.h>
+#include <socks/host.h>
 
 int main(int argc, char const *argv[])
 {
