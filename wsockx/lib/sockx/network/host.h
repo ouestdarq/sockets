@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/socks/sock.h>
+#include "core/sock.h"
 
 class Host : public Sock
 {

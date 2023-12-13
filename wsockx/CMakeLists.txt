@@ -4,18 +4,18 @@ project(out)
 
 add_subdirectory(lib/data-structs)
 
-add_subdirectory(lib/network)
+add_subdirectory(lib/sockx)
 
 
 add_executable(${PROJECT_NAME}
-    ./src/main.cpp
+    src/main.cpp
 )
 
-# target_include_directories(${PROJECT_NAME}
-#     PRIVATE
-#         ./lib
-# )
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ./lib
+)
 
 target_link_libraries(${PROJECT_NAME}
-        sockx
+        sockx-network
 )

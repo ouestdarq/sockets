@@ -1,19 +1,21 @@
 cmake_minimum_required(VERSION 3.26.5)
 
-project(sockx)
+project(sockx-network)
 
-add_subdirectory(core)
+add_subdirectory(network/core)
+
+add_subdirectory(protocol)
 
 add_library(${PROJECT_NAME}
-    sockx/host.cpp sockx/host.h
+    network/host.cpp network/host.h
 )
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC
+    PRIVATE
         ${PROJECT_SOURCE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    sockx-core-requests
-    sockx-core-socks
+        sockx-network-core
+        sockx-protocol
 )

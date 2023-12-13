@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <core/requests/http.h>
+#include <protocol/http.h>
 
 #include "host.h"
 
