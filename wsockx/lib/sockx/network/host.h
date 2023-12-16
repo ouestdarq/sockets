@@ -9,4 +9,5 @@ public:
 
 protected:
     int attach(int sock, struct sockaddr_in addr);
+    void run();
 };

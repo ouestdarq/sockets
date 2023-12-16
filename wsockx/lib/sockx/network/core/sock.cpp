@@ -13,15 +13,16 @@ Sock::Sock(u_short domain, int type, int proto, int port, u_long dev)
             s_addr : htonl(dev),
         },
     };
+
     memset(this->addr.sin_zero, '\0', sizeof(this->addr.sin_zero));
 
-    printf("initializing socket");
     if ((this->sock = socket(domain, type, proto)) < 0)
         goto err;
-    printf("\t\t\t...done\n");
+    printf("initializing socket\t\t\t...done\n");
 
     return;
+
 err:
-    perror("\nError: could not initialize Socket\t");
+    perror("Error: could not initialize Socket");
     exit(1);
 }

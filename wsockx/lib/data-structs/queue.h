@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lists/linked.h>
+#include "linked-list.h"
 
 template <typename T>
 class Queue : private LinkedList<T>

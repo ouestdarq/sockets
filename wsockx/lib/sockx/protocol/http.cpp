@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <map>
-
 #include "http.h"
 
 enum METHODS
@@ -19,39 +17,52 @@ enum METHODS
     TRACE,
 };
 
-struct StrCmp
-{
-    bool operator()(char const *a, char const *b) const
-    {
-        return strcmp(a, b) < 0;
-    }
+dictionary<int> m_http_methods = {
+    {"CONNECT", CONNECT},
+    {"DELETE", DELETE},
+    {"GET", GET},
+    {"HEAD", HEAD},
+    {"OPTIONS", OPTIONS},
+    {"PATCH", PATCH},
+    {"POST", POST},
+    {"PUT", PUT},
+    {"TRACE", TRACE},
 };
 
-Http::Http(char *request)
+void Request::initialize(char **r)
 {
-    char *l, *h, *k, *m, *p, *t, *v;
-
-    if (!strlen(request))
+    int l = strlen(*r);
+    if (!l)
         goto err;
+    for (int i = 0; i < l - 2; i++)
+        if ((*r)[i] == '\n' &&
+            (*r)[i + 2] == '\n')
+            (*r)[i + 1] = '|';
+    return;
+err:
+    perror("Error parsing request");
+    exit(1);
+}
 
-    for (int i = 0; i < strlen(request) - 1; i++)
-        if (request[i] == '\n' && request[i + 1] == '\n')
-            request[i + 1] = '|';
+void Request::parse_line(char *l)
+{
+    this->line["method"] = strtok(l, " ");
+    this->line["uri"] = strtok(nullptr, " ");
+    this->line["version"] = strtok(nullptr, "/");
+    this->line["version"] = strtok(nullptr, "\0");
 
-    l = strtok(request, "\n");
-    h = strtok(nullptr, "|");
-    k = strtok(nullptr, "|");
+    return;
+}
 
-    m = strtok(l, " ");
-    p = strtok(nullptr, " ");
-    t = strtok(nullptr, " ");
-    v = strtok(t, "HTTP/");
+Request::Request(char *r)
+{
+    this->initialize(&r);
 
-    this->uri = p;
-    this->version = atof(v);
-    this->method = this->map_methods(m);
+    char *line = strtok(r, "\n");
+    char *head = strtok(nullptr, "|");
+    char *body = strtok(nullptr, "|");
 
-    printf("%s\t%f\t%i\n", this->uri, this->version, this->method);
+    this->parse_line(line);
 
     return;
 err:
@@ -59,19 +70,11 @@ err:
     exit(1);
 }
 
-int Http::map_methods(const char *m)
+Http::Http(char *request) : Request(request)
 {
-    std::map<const char *, int, StrCmp> methods = {
-        {"CONNECT", CONNECT},
-        {"DELETE", DELETE},
-        {"GET", GET},
-        {"HEAD", HEAD},
-        {"OPTIONS", OPTIONS},
-        {"PATCH", PATCH},
-        {"POST", POST},
-        {"PUT", PUT},
-        {"TRACE", TRACE},
-    };
-
-    return methods[m];
+    printf("%i\n", m_http_methods[this->line["method"]]);
+    return;
+err:
+    perror("Error parsing request");
+    exit(1);
 }

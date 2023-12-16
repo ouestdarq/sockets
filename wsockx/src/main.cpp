@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include <lists/linked.h>
-// #include <queue/queue.h>
-// #include <sockx/network.h>
+
 #include <sockx/network/host.h>
+
+#define PORT 3005
 
 int main(int argc, char const *argv[])
 {
-    Host host = Host(AF_INET, SOCK_STREAM, 0, 3503, INADDR_ANY);
+    Host host = Host(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY);
     // LinkedList l = LinkedList<int>();
     // l.insert(1, 0);
 
