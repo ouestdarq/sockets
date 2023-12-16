@@ -3,8 +3,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-#define BUFFER 300000
-#define BACKLOG 100000
+#define BUFFER 30000
+#define BACKLOG 10
 
 #define HEADERSAMPLE "HTTP/1.1 200 OK\
 Content-Type: text/html\
