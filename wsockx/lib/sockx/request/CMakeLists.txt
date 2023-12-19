@@ -1,8 +1,8 @@
-project(sockx-protocol)
+project(sockx-request)
 
 add_library(${PROJECT_NAME}
     core/request.cpp core/request.h
-    http.cpp http.h
+    protocols/http.cpp protocols/http.h
 )
 
 target_include_directories(${PROJECT_NAME}

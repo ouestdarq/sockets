@@ -1,9 +1,6 @@
 #pragma once
 
-#include "network/core/sock.h"
-#include "network/host.h"
-
-#include "protocol/core/request.h"
-#include "protocol/http.h"
-
-#include "validation/validator.h"
+#include "network/servers/host.h"
+#include "network/sockets/sock.h"
+#include "request/core/request.h"
+#include "request/protocols/http.h"

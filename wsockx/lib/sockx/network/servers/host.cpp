@@ -1,10 +1,10 @@
+#include <network/servers/host.h>
+
+#include <request/protocols/http.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#include <protocol/http.h>
-
-#include "host.h"
 
 int Host::attach(int fd, struct sockaddr_in addr)
 {

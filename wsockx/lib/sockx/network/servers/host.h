@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/sock.h"
+#include <network/sockets/sock.h>
 
 #define BACKLOG 10
 

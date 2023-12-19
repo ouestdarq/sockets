@@ -4,9 +4,9 @@ project(sockx)
 
 add_subdirectory(network)
 
-add_subdirectory(protocol)
+add_subdirectory(request)
 
-add_subdirectory(validation)
+# add_subdirectory(validation)
 
 
 add_library(${PROJECT_NAME}
@@ -14,13 +14,13 @@ add_library(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME}
-    PRIVATE
+    INTERFACE
         ${PROJECT_SOURCE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
         sockx-network
-        sockx-protocol
-        sockx-validation
+        sockx-request
+        # sockx-validation
 )
 

@@ -1,8 +1,8 @@
 project(sockx-network)
 
 add_library(${PROJECT_NAME}
-    core/sock.cpp core/sock.h
-    host.cpp host.h
+    servers/host.cpp servers/host.h
+    sockets/sock.cpp sockets/sock.h
 )
     
 target_include_directories(${PROJECT_NAME}
