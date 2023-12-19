@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sockx/server.h>
+#include <sockx.h>
 
 #define PORT 3005
 

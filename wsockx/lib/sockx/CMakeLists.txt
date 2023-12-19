@@ -10,7 +10,7 @@ add_subdirectory(request)
 
 
 add_library(${PROJECT_NAME}
-    server.h
+    sockx.h
 )
 
 target_include_directories(${PROJECT_NAME}

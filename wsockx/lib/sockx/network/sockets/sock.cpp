@@ -1,10 +1,8 @@
+#include <network/sockets/sock.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <stdexcept>
-
-#include "sock.h"
 
 Sock::Sock(u_short domain, int type, int proto, int port, u_long dev)
 {
