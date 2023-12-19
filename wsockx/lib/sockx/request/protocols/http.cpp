@@ -1,5 +1,7 @@
 #include <request/protocols/http.h>
 
+#include <stdio.h>
+
 enum METHODS
 {
     CONNECT,
@@ -25,9 +27,12 @@ static std::unordered_map<std::string_view, int> m_http_methods = {
     {"TRACE", TRACE},
 };
 
-Http::Http(const char *b) : Request(b)
+Http::Http(const char *buffer) : Request(buffer)
 {
-    // for (auto &[k, v] : this->line)
-    //     printf("%s\n", this->line[k].data());
+    // printf("%s\n", buffer);
+    // for (auto &[k, v] : this->rl)
+    //     printf("[%s] = %s\n", k.data(), this->rl[k].data());
+    for (auto &[k, v] : this->rh)
+        printf("[%s] = %s\n", k.data(), this->rh[k].data());
     return;
 }

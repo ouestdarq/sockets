@@ -5,66 +5,42 @@
 #include <stdlib.h>
 #include <string.h>
 
-static std::unordered_map<std::string_view, std::string_view> map_req_re = {
-    {"body", ""},
-    {"head", "^([a-zA-Z]+[-]?)+[:][' '](.+)"},
-    {"line", "^([A-Z]+)[' ']([/](.?)+)[' '][A-Z]+[/]([0-9]+[.][0-9]+)"},
-};
-
-#define REGEX_LINE
-#define REGEX_HEAD
-
-int Request::re_validate(const char *index, char *target)
+void Request::set_rh(char *h)
 {
-    regex_t re;
-    std::string_view regex;
-
-    if (map_req_re.find(index) == map_req_re.end())
-        goto err;
-
-    regex = map_req_re[index];
-
-    if (regex.empty())
-        goto err;
-
-    return !regcomp(&re, regex.data(), REG_EXTENDED) &&
-           !regexec(&re, target, 0, NULL, 0);
-err:
-    perror("TODO: validator class/injection for reusable purposes (?)");
-    exit(1);
-}
-
-void Request::parse_head(char *h)
-{
-    std::unordered_map<int, std::string_view> map_fields;
+    std::unordered_map<int, std::string_view> map_head;
 
     int count = 0;
-    char *field = strtok(h, "\n");
+    char *head_line = strtok(h, "\n");
     do
-        map_fields[count++] = field;
-    while (field = strtok(NULL, "\n"));
-
+        if (!this->validator->check("header_line", head_line))
+            goto err;
+        else
+            map_head[count++] = head_line;
+    while (head_line = strtok(NULL, "\n"));
+    printf("%i\n", map_head.size());
     for (int i = 0; i < count; i++)
     {
-        char *key = strtok((char *)map_fields[i].data(), ":");
-        char *val = strtok(NULL, " ");
-        this->head[key] = val;
+        char *current = (char *)map_head[i].data();
+        char *key = strtok(current, ":");
+        char *val = strtok(NULL, "\n");
+        this->rh[key] = val ?: "";
     }
 
     return;
 err:
     perror("TODO: handle BAD header");
+    exit(1);
 }
 
-void Request::parse_line(char *l)
+void Request::set_rl(char *l)
 {
-    if (!this->re_validate("line", l))
+    if (!this->validator->check("request_line", l))
         goto err;
 
-    this->line["method"] = strtok(l, " ");
-    this->line["uri"] = strtok(NULL, " ");
-    this->line["type"] = strtok(NULL, "/");
-    this->line["version"] = strtok(NULL, "\0");
+    this->rl["method"] = strtok(l, " ");
+    this->rl["uri"] = strtok(NULL, " ");
+    this->rl["type"] = strtok(NULL, "/");
+    this->rl["version"] = strtok(NULL, "\0");
 
     return;
 err:
@@ -72,9 +48,11 @@ err:
     exit(1);
 }
 
-void Request::initialize(const char *b)
+void Request::parse(const char *b)
 {
+    char *rb, *rh, *rl;
     int size;
+
     if (!(size = strlen(b)))
         goto err;
 
@@ -86,27 +64,29 @@ void Request::initialize(const char *b)
         if (this->buffer[i] == '\n' && this->buffer[i + 2] == '\n')
             this->buffer[i + 1] = '|';
 
+    rl = strtok(this->buffer, "\n");
+    rh = strtok(NULL, "|");
+    rb = strtok(NULL, "\n");
+
+    this->set_rl(rl);
+    this->set_rh(rh);
+
     return;
 err:
     perror("TODO: handle EMPTY requests");
     exit(1);
 }
 
-Request::Request(const char *b)
-{
-    this->initialize(b);
-
-    char *line = strtok(this->buffer, "\n");
-    char *head = strtok(NULL, "|");
-    char *body = strtok(NULL, "\n");
-
-    this->parse_line(line);
-    // this->parse_head(head);
-
-    return;
-}
-
 Request::~Request()
 {
-    delete this->buffer;
+    delete this->buffer, this->validator;
+}
+
+Request::Request(const char *b)
+{
+    this->validator = new RegexValidator(map_regex_request);
+
+    this->parse(b);
+
+    return;
 }

@@ -6,7 +6,7 @@ add_subdirectory(network)
 
 add_subdirectory(request)
 
-# add_subdirectory(validation)
+add_subdirectory(validation)
 
 
 add_library(${PROJECT_NAME}
@@ -21,6 +21,6 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
         sockx-network
         sockx-request
-        # sockx-validation
+        sockx-validation
 )
 
