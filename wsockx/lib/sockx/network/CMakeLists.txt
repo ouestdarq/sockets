@@ -1,10 +1,10 @@
-project(sockx-protocol)
+project(sockx-network)
 
 add_library(${PROJECT_NAME}
-    core/request.cpp core/request.h
-    http.cpp http.h
+    core/sock.cpp core/sock.h
+    host.cpp host.h
 )
-
+    
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${PROJECT_SOURCE_DIR}/..

@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.26.5)
 
-project(sockx-network)
+project(sockx)
 
-add_subdirectory(network/core)
+add_subdirectory(network)
 
 add_subdirectory(protocol)
 
+add_subdirectory(validation)
+
+
 add_library(${PROJECT_NAME}
-    network/host.cpp network/host.h
+    server.h
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -16,6 +19,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-        sockx-network-core
+        sockx-network
         sockx-protocol
+        sockx-validation
 )
+

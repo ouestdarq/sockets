@@ -3,15 +3,19 @@ BUILD=./build
 
 RUN=${BUILD}/out
 
-all: cleanup cmake cbuild crun
+all: cmake out
+
+cmake: cleanup cbuild
 
 cleanup:
 	rm -rf $(BUILD)
 
-cmake:
+cbuild:
 	cmake -B $(BUILD) -S $(SRC)
 
-cbuild:
+out: cbin crun
+
+cbin:
 	make --directory ${BUILD}
 
 crun:

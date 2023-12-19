@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include <sockx/network/host.h>
+#include <sockx/server.h>
 
 #define PORT 3005
 
 int main(int argc, char const *argv[])
 {
-    Host host = Host(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY);
+    Host host = Host(AF_INET, SOCK_STREAM, IPPROTO_TCP, PORT, INADDR_ANY);
+
     // LinkedList l = LinkedList<int>();
     // l.insert(1, 0);
 

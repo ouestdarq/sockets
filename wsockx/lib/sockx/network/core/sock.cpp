@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <stdexcept>
+
 #include "sock.h"
 
 Sock::Sock(u_short domain, int type, int proto, int port, u_long dev)
 {
+    int option = 1;
+
     this->addr = {
         sin_family : domain,
         sin_port : htons(port),
@@ -16,13 +20,15 @@ Sock::Sock(u_short domain, int type, int proto, int port, u_long dev)
 
     memset(this->addr.sin_zero, '\0', sizeof(this->addr.sin_zero));
 
-    if ((this->sock = socket(domain, type, proto)) < 0)
+    if ((this->fd = socket(domain, type, proto)) < 0)
         goto err;
     printf("initializing socket\t\t\t...done\n");
 
-    return;
+    setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
+    return;
 err:
-    perror("Error: could not initialize Socket");
+    shutdown(this->fd, SHUT_RDWR);
+    perror("Error initializing socket");
     exit(1);
 }
