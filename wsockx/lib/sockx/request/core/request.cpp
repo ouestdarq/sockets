@@ -5,26 +5,27 @@
 #include <stdlib.h>
 #include <string.h>
 
+static dictionary map_regex_request = {
+    {"re_header", "^([a-zA-Z-]+)([:][' '][a-zA-Z0-9*/=_?.,;:()\"' '-]+)?.{1}$"},
+    {"re_request", "^([A-Z]+)[' ']([/](.?)+)[' '][A-Z]+[/]([0-9]+[.]?)+.{1}$"},
+};
+
 void Request::set_rh(char *h)
 {
-    std::unordered_map<int, std::string_view> map_head;
+    list map_head;
 
     int count = 0;
     char *head_line = strtok(h, "\n");
+
     do
         if (!this->validator->check("header_line", head_line))
             goto err;
         else
             map_head[count++] = head_line;
     while (head_line = strtok(NULL, "\n"));
-    printf("%i\n", map_head.size());
+
     for (int i = 0; i < count; i++)
-    {
-        char *current = (char *)map_head[i].data();
-        char *key = strtok(current, ":");
-        char *val = strtok(NULL, "\n");
-        this->rh[key] = val ?: "";
-    }
+        this->rh[strtok((char *)map_head[i].data(), ":")] = strtok(NULL, "\n") ?: "";
 
     return;
 err:
@@ -34,13 +35,15 @@ err:
 
 void Request::set_rl(char *l)
 {
-    if (!this->validator->check("request_line", l))
+    if (!this->validator->check("re_reque", l))
         goto err;
-
-    this->rl["method"] = strtok(l, " ");
-    this->rl["uri"] = strtok(NULL, " ");
-    this->rl["type"] = strtok(NULL, "/");
-    this->rl["version"] = strtok(NULL, "\0");
+    else
+        this->rl = {
+            {"method", strtok(l, " ")},
+            {"uri", strtok(NULL, " ")},
+            {"type", strtok(NULL, "/")},
+            {"version", strtok(NULL, "\0")},
+        };
 
     return;
 err:
@@ -79,7 +82,10 @@ err:
 
 Request::~Request()
 {
-    delete this->buffer, this->validator;
+buff:
+    delete this->buffer;
+validator:
+    delete this->validator;
 }
 
 Request::Request(const char *b)

@@ -7,3 +7,5 @@
 
 #include <request/core/request.h>
 #include <request/protocols/http.h>
+
+#include <validation/regex-validator.h>
