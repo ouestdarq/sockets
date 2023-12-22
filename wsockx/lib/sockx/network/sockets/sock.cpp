@@ -25,7 +25,9 @@ Sock::Sock(u_short domain, int type, int proto, int port, u_long dev)
         goto err;
     printf("initializing socket\t\t\t...done\n");
 
-    setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+    option = setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+
+    // printf("%i\n", option);
 
     return;
 err:

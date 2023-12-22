@@ -1,31 +1,35 @@
 #include <request/core/request.h>
 
-#include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-static dictionary map_regex_request = {
+static dictionary map_re_request = {
+    {"re_request", "^([a-zA-Z0-9*/=_?.,;:()\"' '-]+\n)+)"},
     {"re_header", "^([a-zA-Z-]+)([:][' '][a-zA-Z0-9*/=_?.,;:()\"' '-]+)?.{1}$"},
-    {"re_request", "^([A-Z]+)[' ']([/](.?)+)[' '][A-Z]+[/]([0-9]+[.]?)+.{1}$"},
+    {"re_request_line", "^([A-Z]+)[' ']([/](.?)+)[' '][A-Z]+[/]([0-9]+[.]?)+.{1}$"},
 };
 
 void Request::set_rh(char *h)
 {
-    list map_head;
-
-    int count = 0;
-    char *head_line = strtok(h, "\n");
-
+    char *h_l = strtok(h, "\n");
+    int k = 0;
+    list m_h = {};
     do
-        if (!this->validator->check("header_line", head_line))
+        if (!this->validator->check("re_header", h_l))
             goto err;
         else
-            map_head[count++] = head_line;
-    while (head_line = strtok(NULL, "\n"));
+            m_h[k++] = h_l;
+    while (h_l = strtok(NULL, "\n"));
 
-    for (int i = 0; i < count; i++)
-        this->rh[strtok((char *)map_head[i].data(), ":")] = strtok(NULL, "\n") ?: "";
+    if (k != m_h.size())
+        goto err;
+
+    for (auto &[l, m] : m_h)
+    {
+        char *n = strtok((char *)m.data(), ":");
+        this->rh[n] = strtok(NULL, "\n") ?: "";
+    }
 
     return;
 err:
@@ -35,7 +39,7 @@ err:
 
 void Request::set_rl(char *l)
 {
-    if (!this->validator->check("re_reque", l))
+    if (!this->validator->check("re_request_line", l))
         goto err;
     else
         this->rl = {
@@ -82,7 +86,7 @@ err:
 
 Request::~Request()
 {
-buff:
+buffer:
     delete this->buffer;
 validator:
     delete this->validator;
@@ -90,7 +94,7 @@ validator:
 
 Request::Request(const char *b)
 {
-    this->validator = new RegexValidator(map_regex_request);
+    this->validator = new RegexValidator(map_re_request);
 
     this->parse(b);
 

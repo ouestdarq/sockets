@@ -23,6 +23,8 @@ public:
 private:
     char *buffer;
     char response[BUFFER];
+
+protected:
     RegexValidator *validator;
 
 public:

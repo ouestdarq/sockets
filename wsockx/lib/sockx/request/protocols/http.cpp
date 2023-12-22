@@ -29,12 +29,9 @@ static std::unordered_map<std::string_view, int> m_http_methods = {
 
 Http::Http(const char *buffer) : Request(buffer)
 {
-    printf("============================================\n");
-    printf("%s\n", buffer);
-    printf("============================================\n");
-    for (auto &[k, v] : this->rl)
-        printf("[%s] = %s\n", k.data(), this->rl[k].data());
-    for (auto &[k, v] : this->rh)
-        printf("[%s] = %s\n", k.data(), this->rh[k].data());
+    // for (auto &[k, v] : this->rl)
+    //     printf("[%s] = %s\n", k.data(), this->rl[k].data());
+    // for (auto &[k, v] : this->rh)
+    //     printf("[%s] = %s\n", k.data(), this->rh[k].data());
     return;
 }
