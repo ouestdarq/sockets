@@ -1,38 +1,33 @@
 #pragma once
 #include <validation/regex-validator.h>
 
-#include <unordered_map>
-#include <string_view>
-
 #define BUFFER 300
 
 #define SAMPLE_HEAD "HTTP/1.1 200 OK\n\n<html>hello world!</html>\n"
 #define SAMPLE_REQ "GET / HTTP/1.1\nUser-Agent: nil\nAccept: */*\n\n"
 
-using dictionary = std::unordered_map<std::string_view, std::string_view>;
-using list = std::unordered_map<int, std::string_view>;
+using Dictionary = std::unordered_map<std::string_view, std::string_view>;
+using List = std::unordered_map<int, std::string_view>;
 
-class Request
+class Request : public RegexValidator
 {
 
-public:
-    dictionary rl;
-    dictionary rh;
-    dictionary rb;
-
-private:
+protected:
     char *buffer;
     char response[BUFFER];
 
-protected:
-    RegexValidator *validator;
+    Dictionary rl;
+    Dictionary rh;
+    Dictionary rb;
 
-public:
-    Request(const char *b);
-    ~Request();
+    // Validator *validator;
 
 private:
     void parse(const char *buffer);
     void set_rh(char *request_header);
     void set_rl(char *request_line);
+
+public:
+    Request(const char *buffer, Dictionary rules);
+    ~Request();
 };

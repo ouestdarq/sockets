@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-static dictionary map_re_request = {
-    {"re_request", "^([a-zA-Z0-9*/=_?.,;:()\"' '-]+\n)+)"},
+static Dictionary map_rules = {
+    {"re_request", "^([a-zA-Z0-9*/=_?.,;:()\"' '-]+\n)+)\n\n.+$"},
     {"re_header", "^([a-zA-Z-]+)([:][' '][a-zA-Z0-9*/=_?.,;:()\"' '-]+)?.{1}$"},
     {"re_request_line", "^([A-Z]+)[' ']([/](.?)+)[' '][A-Z]+[/]([0-9]+[.]?)+.{1}$"},
 };
@@ -14,9 +14,9 @@ void Request::set_rh(char *h)
 {
     char *h_l = strtok(h, "\n");
     int k = 0;
-    list m_h = {};
+    List m_h = {};
     do
-        if (!this->validator->check("re_header", h_l))
+        if (!this->validate("re_header", h_l))
             goto err;
         else
             m_h[k++] = h_l;
@@ -39,7 +39,7 @@ err:
 
 void Request::set_rl(char *l)
 {
-    if (!this->validator->check("re_request_line", l))
+    if (!this->validate("re_request_line", l))
         goto err;
     else
         this->rl = {
@@ -89,13 +89,11 @@ Request::~Request()
 buffer:
     delete this->buffer;
 validator:
-    delete this->validator;
+    delete this;
 }
 
-Request::Request(const char *b)
+Request::Request(const char *b, Dictionary rules) : RegexValidator(rules)
 {
-    this->validator = new RegexValidator(map_re_request);
-
     this->parse(b);
 
     return;
