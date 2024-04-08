@@ -11,7 +11,6 @@ using List = std::unordered_map<int, std::string_view>;
 
 class Request : public RegexValidator
 {
-
 protected:
     char *buffer;
     char response[BUFFER];
